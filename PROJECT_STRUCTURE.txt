@@ -1,0 +1,46 @@
+.
+├── app
+│   ├── api
+│   │   └── leads
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── products
+│       └── [id]
+├── DEPLOYMENT_CHECKLIST.md
+├── drizzle.config.ts
+├── eslint.config.mjs
+├── lib
+│   ├── db.ts
+│   ├── products.ts
+│   └── schema.ts
+├── next.config.ts
+├── next-env.d.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── PROJECT_COMPLETE.md
+├── PROJECT_STRUCTURE.txt
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── products
+│   │   ├── product-1.jpg
+│   │   ├── product-2.jpg
+│   │   ├── product-3.jpg
+│   │   ├── product-4.jpg
+│   │   ├── product-5.jpg
+│   │   └── product-6.jpg
+│   ├── vercel.svg
+│   └── window.svg
+├── QUICK_START.md
+├── README.md
+├── scripts
+│   └── generate-qr.ts
+├── SETUP_GUIDE.md
+├── START_HERE.md
+└── tsconfig.json
+
+10 directories, 34 files
