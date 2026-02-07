@@ -53,6 +53,7 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
         });
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       setSubmitStatus({
         type: 'error',
         message: 'Network error. Please check your connection and try again.',
