@@ -37,7 +37,13 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        throw new Error('Invalid response from server');
+      }
 
       if (response.ok) {
         setSubmitStatus({
@@ -47,6 +53,7 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
         // Reset form
         event.currentTarget.reset();
       } else {
+        console.error('Server error:', result);
         setSubmitStatus({
           type: 'error',
           message: result.error || 'Something went wrong. Please try again.',
@@ -54,9 +61,11 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+      // Check if it's actually a network error or something else
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setSubmitStatus({
         type: 'error',
-        message: 'Network error. Please check your connection and try again.',
+        message: `Error: ${errorMessage}. Your information may have been saved - please check with us before resubmitting.`,
       });
     } finally {
       setIsSubmitting(false);
