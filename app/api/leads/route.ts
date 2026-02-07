@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { leads } from '@/lib/schema';
+import { desc } from 'drizzle-orm';
+
+export async function GET(request: NextRequest) {
+  try {
+    // Simple authentication - check for admin key
+    const authHeader = request.headers.get('authorization');
+    const adminKey = process.env.ADMIN_KEY || 'demo-admin-key';
+    
+    if (authHeader !== `Bearer ${adminKey}`) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Fetch all leads
+    const allLeads = await db
+      .select()
+      .from(leads)
+      .orderBy(desc(leads.createdAt));
+
+    return NextResponse.json(
+      { leads: allLeads, total: allLeads.length },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch leads' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
