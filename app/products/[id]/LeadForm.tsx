@@ -24,7 +24,9 @@ export default function LeadForm({
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
-    const formData = new FormData(event.currentTarget);
+    // Save form reference before async operations (React event pooling)
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const data = {
       name: formData.get('name') as string,
       phone: formData.get('phone') as string,
@@ -59,8 +61,8 @@ export default function LeadForm({
           message:
             "Thank you! We'll contact you soon to discuss your marble project.",
         });
-        // Reset form
-        event.currentTarget.reset();
+        // Reset form using saved reference
+        form.reset();
       } else {
         console.error('Server error:', result);
         setSubmitStatus({
