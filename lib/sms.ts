@@ -1,4 +1,4 @@
-import { InfobipClient, AuthType } from '@infobip-api/sdk';
+import { Infobip, AuthType } from '@infobip-api/sdk';
 
 // Initialize Infobip client
 function getInfobipClient() {
@@ -11,7 +11,7 @@ function getInfobipClient() {
     );
   }
 
-  return new InfobipClient({
+  return new Infobip({
     baseUrl: baseUrl,
     apiKey: apiKey,
     authType: AuthType.ApiKey,
