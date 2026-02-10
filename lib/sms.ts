@@ -1,15 +1,21 @@
-import plivo from 'plivo';
+import { InfobipClient, AuthType } from '@infobip-api/sdk';
 
-// Initialize Plivo client
-function getPlivoClient() {
-  const authId = process.env.PLIVO_AUTH_ID;
-  const authToken = process.env.PLIVO_AUTH_TOKEN;
+// Initialize Infobip client
+function getInfobipClient() {
+  const apiKey = process.env.INFOBIP_API_KEY;
+  const baseUrl = process.env.INFOBIP_BASE_URL;
 
-  if (!authId || !authToken) {
-    throw new Error('Plivo credentials not configured. Set PLIVO_AUTH_ID and PLIVO_AUTH_TOKEN in environment variables.');
+  if (!apiKey || !baseUrl) {
+    throw new Error(
+      'Infobip credentials not configured. Set INFOBIP_API_KEY and INFOBIP_BASE_URL in environment variables.'
+    );
   }
 
-  return new plivo.Client(authId, authToken);
+  return new InfobipClient({
+    baseUrl: baseUrl,
+    apiKey: apiKey,
+    authType: AuthType.ApiKey,
+  });
 }
 
 export interface SendSMSParams {
@@ -18,33 +24,40 @@ export interface SendSMSParams {
 }
 
 /**
- * Send SMS via Plivo
+ * Send SMS via Infobip
  * @param params - SMS parameters (to, message)
- * @returns Message UUID from Plivo
+ * @returns Message ID from Infobip
  */
 export async function sendSMS(params: SendSMSParams): Promise<string> {
-  const client = getPlivoClient();
-  const src = process.env.PLIVO_PHONE_NUMBER;
-
-  if (!src) {
-    throw new Error('PLIVO_PHONE_NUMBER not configured in environment variables.');
-  }
+  const client = getInfobipClient();
+  const from = process.env.INFOBIP_SENDER_ID || 'MarbleStone';
 
   try {
-    const response = await client.messages.create({
-      src: src,
-      dst: params.to,
-      text: params.message,
+    const response = await client.channels.sms.send({
+      messages: [
+        {
+          destinations: [
+            {
+              to: params.to,
+            },
+          ],
+          from: from,
+          text: params.message,
+        },
+      ],
     });
 
-    console.log('SMS sent successfully:', {
-      messageUuid: response.messageUuid,
+    const messageId = response.data.messages?.[0]?.messageId;
+
+    console.log('SMS sent successfully via Infobip:', {
+      messageId: messageId,
       to: params.to,
+      status: response.data.messages?.[0]?.status,
     });
 
-    return response.messageUuid[0];
+    return messageId || 'unknown';
   } catch (error) {
-    console.error('Failed to send SMS:', error);
+    console.error('Failed to send SMS via Infobip:', error);
     throw error;
   }
 }
