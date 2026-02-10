@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { leads } from '@/lib/schema';
 import { desc } from 'drizzle-orm';
+import { sendLeadConfirmationSMS } from '@/lib/sms';
+import { getProductById } from '@/lib/products';
 
 export async function GET(request: NextRequest) {
   try {
@@ -84,6 +86,29 @@ export async function POST(request: NextRequest) {
       message: body.message?.trim() || null,
       productId: productId,
     }).returning();
+
+    // Send SMS confirmation (non-blocking - don't fail if SMS fails)
+    try {
+      const product = getProductById(productId);
+      const productName = product?.name || 'our marble';
+
+      // Ensure phone number is in E.164 format
+      let formattedPhone = phone.trim();
+      if (!formattedPhone.startsWith('+')) {
+        // Assume Israeli number if no country code
+        formattedPhone = `+972${formattedPhone.replace(/^0/, '')}`;
+      }
+
+      await sendLeadConfirmationSMS(
+        formattedPhone,
+        name.trim(),
+        productName
+      );
+      console.log('SMS confirmation sent to:', formattedPhone);
+    } catch (smsError) {
+      // Log SMS error but don't fail the lead submission
+      console.error('Failed to send SMS confirmation:', smsError);
+    }
 
     return NextResponse.json(
       {
