@@ -40,11 +40,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    const { name, phone, productId } = body;
-    
-    if (!name || !phone || !productId) {
+    const { name, phone, city, productId } = body;
+
+    if (!name || !phone || !city || !productId) {
       return NextResponse.json(
-        { error: 'Name, phone, and productId are required' },
+        { error: 'Name, phone, city, and productId are required' },
         { status: 400 }
       );
     }
@@ -65,11 +65,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate city (at least 2 characters)
+    if (city.trim().length < 2) {
+      return NextResponse.json(
+        { error: 'City must be at least 2 characters' },
+        { status: 400 }
+      );
+    }
+
     // Insert lead into database
     const newLead = await db.insert(leads).values({
       name: name.trim(),
       phone: phone.trim(),
       email: body.email?.trim() || null,
+      city: city.trim(),
+      street: body.street?.trim() || null,
+      streetNumber: body.streetNumber?.trim() || null,
       message: body.message?.trim() || null,
       productId: productId,
     }).returning();

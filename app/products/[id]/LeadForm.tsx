@@ -5,9 +5,14 @@ import { useState } from 'react';
 interface LeadFormProps {
   productId: string;
   productName: string;
+  defaultMessage?: string;
 }
 
-export default function LeadForm({ productId, productName }: LeadFormProps) {
+export default function LeadForm({
+  productId,
+  productName,
+  defaultMessage,
+}: LeadFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | null;
@@ -24,6 +29,9 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
       name: formData.get('name') as string,
       phone: formData.get('phone') as string,
       email: formData.get('email') as string,
+      city: formData.get('city') as string,
+      street: formData.get('street') as string,
+      streetNumber: formData.get('streetNumber') as string,
       message: formData.get('message') as string,
       productId,
     };
@@ -48,7 +56,8 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
       if (response.ok) {
         setSubmitStatus({
           type: 'success',
-          message: 'Thank you! We\'ll contact you soon.',
+          message:
+            "Thank you! We'll contact you soon to discuss your marble project.",
         });
         // Reset form
         event.currentTarget.reset();
@@ -62,7 +71,8 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
     } catch (error) {
       console.error('Form submission error:', error);
       // Check if it's actually a network error or something else
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       setSubmitStatus({
         type: 'error',
         message: `Error: ${errorMessage}. Your information may have been saved - please check with us before resubmitting.`,
@@ -124,6 +134,57 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
         />
       </div>
 
+      {/* Address Fields */}
+      <div>
+        <label
+          htmlFor="city"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          City <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Your city"
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-3">
+        <div className="col-span-2">
+          <label
+            htmlFor="street"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Street
+          </label>
+          <input
+            type="text"
+            id="street"
+            name="street"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Street name"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="streetNumber"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            No.
+          </label>
+          <input
+            type="text"
+            id="streetNumber"
+            name="streetNumber"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="123"
+          />
+        </div>
+      </div>
+
       <div>
         <label
           htmlFor="message"
@@ -135,6 +196,7 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
           id="message"
           name="message"
           rows={4}
+          defaultValue={defaultMessage}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Any questions or additional information..."
         />
@@ -157,7 +219,7 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
         disabled={isSubmitting}
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200 font-medium"
       >
-        {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
+        {isSubmitting ? 'Submitting...' : 'Request Consultation'}
       </button>
 
       <p className="text-xs text-gray-500 text-center">
@@ -166,4 +228,3 @@ export default function LeadForm({ productId, productName }: LeadFormProps) {
     </form>
   );
 }
-

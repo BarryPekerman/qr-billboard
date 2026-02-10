@@ -1,7 +1,6 @@
 export interface Product {
   id: string;
   name: string;
-  price: number;
   image: string;
   description: string;
   features: string[];
@@ -9,87 +8,55 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: '1',
-    name: 'Wireless Headphones Pro',
-    price: 199.99,
-    image: '/products/product-1.jpg',
-    description: 'Premium wireless headphones with active noise cancellation and 30-hour battery life. Experience crystal-clear audio quality and comfort for all-day wear.',
+    id: 'carrara-white',
+    name: 'Carrara White',
+    image: '/products/carrara-white.jpg',
+    description: 'Classic Italian marble featuring elegant white background with soft gray veining. Perfect for timeless luxury in any space.',
     features: [
-      'Active Noise Cancellation',
-      '30-hour battery life',
-      'Bluetooth 5.0 connectivity',
-      'Premium leather ear cushions',
-      'Foldable design with carrying case',
+      'Pure white background',
+      'Delicate gray veining',
+      'Classic Italian origin',
+      'Suitable for indoor applications',
+      'Polished or honed finish available',
     ],
   },
   {
-    id: '2',
-    name: 'Smart Watch Ultra',
-    price: 349.99,
-    image: '/products/product-2.jpg',
-    description: 'Advanced fitness tracking smartwatch with heart rate monitoring, GPS, and water resistance. Stay connected and track your health goals.',
+    id: 'calacatta-gold',
+    name: 'Calacatta Gold',
+    image: '/products/calacatta-gold.jpg',
+    description: 'Premium marble with dramatic golden and gray veining on pristine white. The epitome of luxury and sophistication.',
     features: [
-      'Heart rate & SpO2 monitoring',
-      'Built-in GPS',
-      'Water resistant up to 50m',
-      '7-day battery life',
-      'Sleep tracking & analysis',
+      'Distinctive gold veining',
+      'Bright white background',
+      'Bold dramatic patterns',
+      'High-end luxury applications',
+      'Statement piece material',
     ],
   },
   {
-    id: '3',
-    name: 'Ergonomic Office Chair',
-    price: 449.99,
-    image: '/products/product-3.jpg',
-    description: 'Premium ergonomic office chair with lumbar support and adjustable features. Designed for maximum comfort during long work sessions.',
+    id: 'emperador-dark',
+    name: 'Emperador Dark',
+    image: '/products/emperador-dark.jpg',
+    description: 'Rich dark brown marble with striking white veining. Adds warmth and dramatic elegance to any interior.',
     features: [
-      'Adjustable lumbar support',
-      '4D armrests',
-      'Breathable mesh back',
-      'Tilt and height adjustment',
-      'Weight capacity: 300 lbs',
+      'Deep chocolate brown base',
+      'Prominent white veining',
+      'Warm luxurious feel',
+      'Excellent for accent walls',
+      'Available in various thicknesses',
     ],
   },
   {
-    id: '4',
-    name: 'Portable Bluetooth Speaker',
-    price: 79.99,
-    image: '/products/product-4.jpg',
-    description: 'Compact waterproof speaker with 360° sound and 12-hour battery. Perfect for outdoor adventures and pool parties.',
+    id: 'custom-pattern',
+    name: 'Custom Pattern',
+    image: '/products/custom-pattern.jpg',
+    description: 'Have a specific marble pattern in mind? Work with our team to source and create your perfect custom marble solution.',
     features: [
-      '360° surround sound',
-      'IPX7 waterproof rating',
-      '12-hour playtime',
-      'USB-C fast charging',
-      'Built-in microphone for calls',
-    ],
-  },
-  {
-    id: '5',
-    name: 'LED Desk Lamp',
-    price: 49.99,
-    image: '/products/product-5.jpg',
-    description: 'Modern LED desk lamp with adjustable brightness and color temperature. Reduce eye strain with flicker-free illumination.',
-    features: [
-      '5 brightness levels',
-      '3 color temperature modes',
-      'Touch control panel',
-      'USB charging port',
-      'Energy-efficient LED',
-    ],
-  },
-  {
-    id: '6',
-    name: 'Mechanical Keyboard',
-    price: 129.99,
-    image: '/products/product-6.jpg',
-    description: 'Premium mechanical keyboard with RGB backlighting and customizable keys. Perfect for gaming and productivity.',
-    features: [
-      'Mechanical switches (tactile)',
-      'RGB per-key backlighting',
-      'Aluminum frame',
-      'Programmable macro keys',
-      'Detachable USB-C cable',
+      'Personalized pattern selection',
+      'Expert sourcing worldwide',
+      'Custom specifications',
+      'Dedicated design consultation',
+      'Unique project solutions',
     ],
   },
 ];
@@ -101,4 +68,3 @@ export function getProductById(id: string): Product | undefined {
 export function getAllProductIds(): string[] {
   return products.map((product) => product.id);
 }
-

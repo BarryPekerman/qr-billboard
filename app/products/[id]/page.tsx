@@ -13,14 +13,32 @@ export async function generateStaticParams() {
 
 export default async function ProductDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { id } = await params;
   const product = getProductById(id);
 
   if (!product) {
     notFound();
+  }
+
+  // Get size parameters from URL
+  const resolvedSearchParams = await searchParams;
+  const width = resolvedSearchParams.width as string | undefined;
+  const height = resolvedSearchParams.height as string | undefined;
+  const customDescription =
+    (resolvedSearchParams.customDescription as string | undefined) || '';
+
+  // Build default message with size info
+  let defaultMessage = '';
+  if (width && height) {
+    defaultMessage = `Dimensions: ${width}cm × ${height}cm`;
+    if (customDescription) {
+      defaultMessage += `\n\nCustom pattern description:\n${customDescription}`;
+    }
   }
 
   return (
@@ -42,7 +60,7 @@ export default async function ProductDetailPage({
             d="M10 19l-7-7m0 0l7-7m-7 7h18"
           />
         </svg>
-        Back to Catalogue
+        Back to Pattern Selection
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -62,9 +80,22 @@ export default async function ProductDetailPage({
             {product.name}
           </h1>
 
-          <p className="text-4xl font-bold text-blue-600 mb-6">
-            ${product.price.toFixed(2)}
-          </p>
+          {/* Selected Size Display */}
+          {width && height && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h3 className="text-sm font-semibold text-blue-900 mb-2">
+                Your Selection
+              </h3>
+              <p className="text-lg font-medium text-blue-800">
+                {width}cm × {height}cm
+              </p>
+              {customDescription && (
+                <p className="text-sm text-blue-700 mt-2">
+                  {customDescription}
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-3">
@@ -104,16 +135,19 @@ export default async function ProductDetailPage({
         <div>
           <div className="bg-white rounded-lg shadow-lg p-6 sticky top-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Interested in this product?
+              Request a Consultation
             </h2>
             <p className="text-gray-600 mb-6">
-              Leave your details and we'll get back to you with more information.
+              Share your contact details and project information. Our team will reach out to discuss your marble selection.
             </p>
-            <LeadForm productId={product.id} productName={product.name} />
+            <LeadForm
+              productId={product.id}
+              productName={product.name}
+              defaultMessage={defaultMessage}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
-

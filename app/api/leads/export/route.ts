@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       .orderBy(desc(leads.createdAt));
 
     // Convert to CSV
-    const csvHeader = 'ID,Name,Phone,Email,Message,Product ID,Created At\n';
+    const csvHeader = 'ID,Name,Phone,Email,City,Street,Street Number,Message,Product ID,Created At\n';
     const csvRows = allLeads.map(lead => {
       const createdAt = new Date(lead.createdAt).toISOString();
       return [
@@ -31,6 +31,9 @@ export async function GET(request: NextRequest) {
         `"${lead.name}"`,
         `"${lead.phone}"`,
         `"${lead.email || ''}"`,
+        `"${lead.city || ''}"`,
+        `"${lead.street || ''}"`,
+        `"${lead.streetNumber || ''}"`,
         `"${(lead.message || '').replace(/"/g, '""')}"`,
         lead.productId,
         createdAt,
@@ -43,7 +46,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'text/csv',
-        'Content-Disposition': `attachment; filename="leads-${Date.now()}.csv"`,
+        'Content-Disposition': `attachment; filename="marble-leads-${Date.now()}.csv"`,
       },
     });
   } catch (error) {

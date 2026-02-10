@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Product Catalogue - QR Billboard",
-  description: "Browse our premium product catalogue and connect with us for more information",
+  title: "Premium Marble & Stone - Pattern Selection",
+  description: "Discover exquisite marble patterns for your luxury projects. Browse our curated collection and request a consultation with our expert team.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <header className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Product Catalogue</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Premium Marble & Stone</h1>
           </div>
         </header>
         <main className="min-h-screen bg-gray-50">
@@ -39,7 +39,7 @@ export default function RootLayout({
         <footer className="bg-white border-t mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <p className="text-center text-gray-600 text-sm">
-              © 2026 Product Catalogue. All rights reserved.
+              © 2026 Premium Marble & Stone. All rights reserved.
             </p>
           </div>
         </footer>

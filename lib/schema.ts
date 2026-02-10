@@ -6,6 +6,9 @@ export const leads = sqliteTable('leads', {
   phone: text('phone').notNull(),
   email: text('email'),
   message: text('message'),
+  city: text('city'),
+  street: text('street'),
+  streetNumber: text('street_number'),
   productId: text('product_id').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()

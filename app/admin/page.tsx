@@ -9,6 +9,9 @@ interface Lead {
   name: string;
   phone: string;
   email: string | null;
+  city: string | null;
+  street: string | null;
+  streetNumber: string | null;
   message: string | null;
   productId: string;
   createdAt: Date;
@@ -105,6 +108,8 @@ export default function AdminPage() {
     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     lead.phone.includes(searchTerm) ||
     (lead.email && lead.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (lead.city && lead.city.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (lead.street && lead.street.toLowerCase().includes(searchTerm.toLowerCase())) ||
     lead.productId.includes(searchTerm)
   );
 
@@ -155,7 +160,7 @@ export default function AdminPage() {
           </form>
           <div className="text-center">
             <Link href="/" className="text-sm text-blue-600 hover:text-blue-700">
-              ← Back to Catalogue
+              ← Back to Pattern Selection
             </Link>
           </div>
           <div className="mt-4 p-4 bg-yellow-50 rounded-md">
@@ -215,7 +220,7 @@ export default function AdminPage() {
             <div className="flex-1 w-full sm:w-auto">
               <input
                 type="text"
-                placeholder="Search by name, phone, email, or product..."
+                placeholder="Search by name, phone, email, city, or product..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -249,6 +254,15 @@ export default function AdminPage() {
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    City
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Street
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    No.
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Product
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -262,7 +276,7 @@ export default function AdminPage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredLeads.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={10} className="px-6 py-12 text-center text-gray-500">
                       {searchTerm ? 'No leads found matching your search' : 'No leads yet'}
                     </td>
                   </tr>
@@ -282,6 +296,15 @@ export default function AdminPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {lead.email || '-'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {lead.city || '-'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {lead.street || '-'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {lead.streetNumber || '-'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {product?.name || `Product ${lead.productId}`}
@@ -304,7 +327,7 @@ export default function AdminPage() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <Link href="/" className="text-sm text-blue-600 hover:text-blue-700">
-            ← Back to Catalogue
+            ← Back to Pattern Selection
           </Link>
         </div>
       </div>
