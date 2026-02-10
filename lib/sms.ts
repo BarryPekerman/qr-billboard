@@ -1,21 +1,17 @@
-import { Infobip, AuthType } from '@infobip-api/sdk';
+import twilio from 'twilio';
 
-// Initialize Infobip client
-function getInfobipClient() {
-  const apiKey = process.env.INFOBIP_API_KEY;
-  const baseUrl = process.env.INFOBIP_BASE_URL;
+// Initialize Twilio client
+function getTwilioClient() {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
 
-  if (!apiKey || !baseUrl) {
+  if (!accountSid || !authToken) {
     throw new Error(
-      'Infobip credentials not configured. Set INFOBIP_API_KEY and INFOBIP_BASE_URL in environment variables.'
+      'Twilio credentials not configured. Set TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN in environment variables.'
     );
   }
 
-  return new Infobip({
-    baseUrl: baseUrl,
-    apiKey: apiKey,
-    authType: AuthType.ApiKey,
-  });
+  return twilio(accountSid, authToken);
 }
 
 export interface SendSMSParams {
@@ -24,40 +20,36 @@ export interface SendSMSParams {
 }
 
 /**
- * Send SMS via Infobip
+ * Send SMS via Twilio
  * @param params - SMS parameters (to, message)
- * @returns Message ID from Infobip
+ * @returns Message SID from Twilio
  */
 export async function sendSMS(params: SendSMSParams): Promise<string> {
-  const client = getInfobipClient();
-  const from = process.env.INFOBIP_SENDER_ID || 'MarbleStone';
+  const client = getTwilioClient();
+  const from = process.env.TWILIO_PHONE_NUMBER;
+
+  if (!from) {
+    throw new Error(
+      'Twilio phone number not configured. Set TWILIO_PHONE_NUMBER in environment variables.'
+    );
+  }
 
   try {
-    const response = await client.channels.sms.send({
-      messages: [
-        {
-          destinations: [
-            {
-              to: params.to,
-            },
-          ],
-          from: from,
-          text: params.message,
-        },
-      ],
-    });
-
-    const messageId = response.data.messages?.[0]?.messageId;
-
-    console.log('SMS sent successfully via Infobip:', {
-      messageId: messageId,
+    const message = await client.messages.create({
+      body: params.message,
+      from: from,
       to: params.to,
-      status: response.data.messages?.[0]?.status,
     });
 
-    return messageId || 'unknown';
+    console.log('SMS sent successfully via Twilio:', {
+      sid: message.sid,
+      to: params.to,
+      status: message.status,
+    });
+
+    return message.sid;
   } catch (error) {
-    console.error('Failed to send SMS via Infobip:', error);
+    console.error('Failed to send SMS via Twilio:', error);
     throw error;
   }
 }
